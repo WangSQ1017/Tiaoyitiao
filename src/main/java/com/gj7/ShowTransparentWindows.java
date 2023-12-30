@@ -172,11 +172,11 @@ public class ShowTransparentWindows extends JFrame {
 
     public BufferedImage screenPic(Boolean save) {
         try {
-            Point location = getLocation();
+            Point location = getLocationOnScreen();
             Dimension size = getSize();
             Robot robot = null;
             robot = new Robot();
-            Rectangle screenRect = new Rectangle(location.x + 10, location.y + 10 + 35 + 25, size.width - 20, size.height - 10 - 10 - 35);
+            Rectangle screenRect = new Rectangle(location.x + 10, location.y + 10 + 35 + 25, size.width - 20, size.height - 10 - 10 - 35 - 25);
             BufferedImage screenshot = robot.createScreenCapture(screenRect);
             if (save){
                 File file = new File("C:\\Users\\ws615\\Desktop\\新建文件夹\\" + System.currentTimeMillis() + ".png");

@@ -56,7 +56,7 @@ public class GlobalKeyListener implements NativeKeyListener {
                     showLine.setAlwaysOnTop(true);
                 }
                 double sqrt = Math.sqrt(Math.pow(Math.abs(endX - startX), 2) + Math.pow(Math.abs(endY - startY), 2));
-                transparentWindows.screenPic(true);
+                transparentWindows.screenPic(false);
                 Robot robot = new Robot();
                 if (ShowTransparentWindows.showLineFlag){
                     robot.mouseMove(location.x, location.y - 2);
@@ -115,10 +115,10 @@ public class GlobalKeyListener implements NativeKeyListener {
                 }
             }
         }
-        for (int i : top) {
+        for (int i = 0; i < top.length; i++) {
             top[i] += 1;
         }
-        for (int i : bottom) {
+        for (int i = 0; i < bottom.length; i++) {
             bottom[i] += 1;
         }
         return analyzingImages(bufferedImage, top, bottom);
