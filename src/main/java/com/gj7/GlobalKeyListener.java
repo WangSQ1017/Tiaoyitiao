@@ -46,7 +46,7 @@ public class GlobalKeyListener implements NativeKeyListener {
                 int[] bottom = {149,140,179};
                 int[] startPoint = analyzingImages(bufferedImage, top, bottom);
                 int startX = startPoint[0] + frameLocation.x + 10;
-                int startY = startPoint[1] + frameLocation.y + 45;
+                int startY = startPoint[1] + frameLocation.y + 10 + 35 + 20;
                 if (ShowTransparentWindows.showLineFlag){
                     if (endX > startX) {
                         showLine = new ShowLine(endX - startX, Math.abs(endY - startY), startX, endY, false);

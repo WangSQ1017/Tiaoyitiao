@@ -155,7 +155,17 @@ public class ShowTransparentWindows extends JFrame {
             }
         });
         jPanel.add(jTextField);
+
+        JLabel jLabel = new JLabel("作者: 十七有丶瘦，本程序免费，严禁买卖！！");
+//        jLabel.setForeground(Color.blue);
+        jLabel.setHorizontalAlignment(JLabel.CENTER);
+        jLabel.setVerticalAlignment(JLabel.BOTTOM);
+        jPanel.add(jLabel);
+
+
         getContentPane().add(jPanel);
+
+
 
         setVisible(true);
     }
@@ -166,7 +176,7 @@ public class ShowTransparentWindows extends JFrame {
             Dimension size = getSize();
             Robot robot = null;
             robot = new Robot();
-            Rectangle screenRect = new Rectangle(location.x + 10, location.y + 10 + 35, size.width - 20, size.height - 10 - 10 - 35);
+            Rectangle screenRect = new Rectangle(location.x + 10, location.y + 10 + 35 + 25, size.width - 20, size.height - 10 - 10 - 35);
             BufferedImage screenshot = robot.createScreenCapture(screenRect);
             if (save){
                 File file = new File("C:\\Users\\ws615\\Desktop\\新建文件夹\\" + System.currentTimeMillis() + ".png");
