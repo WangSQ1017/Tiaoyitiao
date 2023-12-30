@@ -6,27 +6,20 @@ import org.jnativehook.NativeHookException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.text.AttributedCharacterIterator;
 
 public class ShowTransparentWindows extends JFrame {
 
-    private int lineXStart = 100;
-    private int lineYStart = 100;
-    private int lineXEnd = 0;
-    private int lineYEnd = 0;
+    public static double time = 4.30D;
+    public static Boolean showLineFlag = true;
 
     public ShowTransparentWindows() {
     }
@@ -62,10 +55,6 @@ public class ShowTransparentWindows extends JFrame {
                 int yy = yOnScreen - yOld[0];
                 ShowTransparentWindows.this.setLocation(xx, yy);//设置拖拽后，窗口的位置
             }
-            @Override
-            public void mouseMoved (MouseEvent e) {
-                System.out.println(e);
-            }
         });
 
         MyJPanel jPanel = new MyJPanel(this);
@@ -77,6 +66,9 @@ public class ShowTransparentWindows extends JFrame {
         jButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
+                if (GlobalKeyListener.showLine != null){
+                    GlobalKeyListener.showLine.dispose();
+                }
                 try {
                     GlobalScreen.unregisterNativeHook();
                 } catch (NativeHookException nativeHookException) {
@@ -88,29 +80,28 @@ public class ShowTransparentWindows extends JFrame {
         jButton.setMargin(new Insets(0, 0, 0, 0));
         jPanel.add(jButton);
 
-
-//        MyJButton openBorderButton = new MyJButton("开启边框");
-//        openBorderButton.addActionListener(new ActionListener() {
+//        MyJButton ScreenButton = new MyJButton("截图", this);
+//        ScreenButton.addActionListener(new ActionListener() {
 //            public void actionPerformed(ActionEvent e) {
-//                dispose();
-//                Point location = getLocation();
-//                Dimension size = getSize();
-//                new ShowWindows(size.width, size.height, location.x, location.y);
+//                screenPic(true);
 //            }
 //        });
-//        openBorderButton.setPreferredSize(new Dimension(50, 25));
-//        openBorderButton.setMargin(new Insets(0, 0, 0, 0));
-//        jPanel.add(openBorderButton);
+//        ScreenButton.setPreferredSize(new Dimension(30, 25));
+//        ScreenButton.setMargin(new Insets(0, 0, 0, 0));
+//        jPanel.add(ScreenButton);
 
-        MyJButton ScreenButton = new MyJButton("截图", this);
-        ScreenButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                screenPic();
+        JCheckBox jCheckBox = new JCheckBox("是否显示辅助线", true);
+        jCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (1 == e.getStateChange()){
+                    showLineFlag = true;
+                } else {
+                    showLineFlag = false;
+                }
             }
         });
-        ScreenButton.setPreferredSize(new Dimension(30, 25));
-        ScreenButton.setMargin(new Insets(0, 0, 0, 0));
-        jPanel.add(ScreenButton);
+        jPanel.add(jCheckBox);
 
         MyJButton resetButton = new MyJButton("变大小", this);
         resetButton.addMouseMotionListener(new MouseMotionAdapter() {
@@ -135,12 +126,41 @@ public class ShowTransparentWindows extends JFrame {
         resetButton.setMargin(new Insets(0, 0, 0, 0));
         jPanel.add(resetButton);
 
+        JTextField jTextField = new JTextField();
+        jTextField.setPreferredSize(new Dimension(30, 25));
+        jTextField.setText("4.30");
+        jTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                double temp = time;
+                try {
+                    temp = Double.parseDouble(jTextField.getText());
+                } catch (Exception ignored){
+                }
+                time = temp;
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                double temp = time;
+                try {
+                    temp = Double.parseDouble(jTextField.getText());
+                } catch (Exception ignored){
+                }
+                time = temp;
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+        jPanel.add(jTextField);
         getContentPane().add(jPanel);
 
         setVisible(true);
     }
 
-    public BufferedImage screenPic() {
+    public BufferedImage screenPic(Boolean save) {
         try {
             Point location = getLocation();
             Dimension size = getSize();
@@ -148,8 +168,10 @@ public class ShowTransparentWindows extends JFrame {
             robot = new Robot();
             Rectangle screenRect = new Rectangle(location.x + 10, location.y + 10 + 35, size.width - 20, size.height - 10 - 10 - 35);
             BufferedImage screenshot = robot.createScreenCapture(screenRect);
-            File file = new File("C:\\Users\\DELL\\Desktop\\新建文件夹\\" + System.currentTimeMillis() + ".png");
-            ImageIO.write(screenshot, "png", file);
+            if (save){
+                File file = new File("C:\\Users\\ws615\\Desktop\\新建文件夹\\" + System.currentTimeMillis() + ".png");
+                ImageIO.write(screenshot, "png", file);
+            }
             return screenshot;
 
         } catch (AWTException | IOException ex) {
