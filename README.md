@@ -6,4 +6,5 @@
 ![image](https://github.com/WangSQ1017/Tiaoyitiao/assets/46115428/1a30d192-a71f-4cfb-8a92-0a8257c6cad9)
 4. 4.30为默认步长，根据分辨率不同自行设置
 
-实例GIF: 后续补
+实例GIF: ![使用示例](https://github.com/WangSQ1017/Tiaoyitiao/assets/46115428/f1968ccd-56b9-4599-bdfb-bac094ef2027)
+
